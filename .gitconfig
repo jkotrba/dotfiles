@@ -6,6 +6,9 @@
 	# View the current working tree status using the short format
 	s = status -s
 
+	# Shortcut for regular status
+	st = status
+
 	# Show the diff between the latest commit and the current state
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
@@ -56,6 +59,8 @@
 
 	# List contributors with number of commits
 	contributors = shortlog --summary --numbered
+	co = checkout
+
 
 	# Merge GitHub pull request on top of the `master` branch
 	mpr = "!f() { \
@@ -114,10 +119,25 @@
 	changed = green
 	untracked = cyan
 
+[difftool "Kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
 [diff]
 
 	# Detect copies as well as renames
 	renames = copies
+	tool = Kaleidoscope
+
+[difftool]
+    prompt = false
+
+[mergetool "Kaleidoscope"]
+    cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+    trustExitCode = true
+
+[mergetool]
+    prompt = false
+	keepBackup = false
 
 [help]
 
@@ -128,6 +148,7 @@
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+	tool = Kaleidoscope
 
 [push]
 
@@ -157,3 +178,6 @@
 [url "git://gist.github.com/"]
 
 	insteadOf = "gist:"
+[user]
+	email = jkotrbo@ebay.com
+	name = jkotrbo
